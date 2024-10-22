@@ -1,0 +1,6 @@
+@Aeternum_HostAddress = http://localhost:5056
+
+GET {{Aeternum_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
