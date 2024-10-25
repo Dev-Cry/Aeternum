@@ -3,12 +3,16 @@ using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Aeternum.Entities.User;
+using Aeternum.Services;
 
 internal class Program
 {
     private static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+
+        builder.Services.AddScoped<UserService>();
+        builder.Services.AddScoped<RoleService>();
 
         // Add services to the container.
         builder.Services.AddControllers();
