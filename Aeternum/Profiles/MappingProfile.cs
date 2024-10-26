@@ -1,6 +1,7 @@
-﻿using Aeternum.DTOs.User;
+﻿using AutoMapper;
 using Aeternum.Entities.User;
-using AutoMapper;
+using Aeternum.DTOs.User;
+using Aeternum.DTOs.Role;
 
 namespace Aeternum.Profiles
 {
@@ -8,21 +9,30 @@ namespace Aeternum.Profiles
     {
         public MappingProfile()
         {
-            // Mapování mezi ApplicationUser a jednotlivými DTOs
-            CreateMap<ApplicationUser, ApplicationUserDTO>();
-            CreateMap<ApplicationUserDTO, ApplicationUser>();
+            // Mapování mezi ApplicationUser a ApplicationUserDTO
+            CreateMap<ApplicationUser, ApplicationUserDTO>().ReverseMap();
 
-            CreateMap<ApplicationUser, ApplicationUserCreateDTO>();
-            CreateMap<ApplicationUserCreateDTO, ApplicationUser>();
+            // Mapování pro vytváření uživatele
+            CreateMap<ApplicationUserCreateDTO, ApplicationUser>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore()) // Ignorujte ID, protože je generováno
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.UtcNow))
+                .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => DateTime.UtcNow));
 
-            CreateMap<ApplicationUser, ApplicationUserRegisterDTO>();
-            CreateMap<ApplicationUserRegisterDTO, ApplicationUser>();
+            // Mapování pro aktualizaci uživatele
+            CreateMap<ApplicationUserUpdateDTO, ApplicationUser>()
+                .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => DateTime.UtcNow));
 
-            CreateMap<ApplicationUser, ApplicationUserLoginDTO>();
+            // Mapování pro registraci uživatele
+            CreateMap<ApplicationUserRegisterDTO, ApplicationUser>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.UtcNow))
+                .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => DateTime.UtcNow));
+
+            // Mapování pro přihlášení uživatele
             CreateMap<ApplicationUserLoginDTO, ApplicationUser>();
 
-            CreateMap<ApplicationUser, ApplicationUserUpdateDTO>();
-            CreateMap<ApplicationUserUpdateDTO, ApplicationUser>();
+            // Mapování mezi ApplicationRole a RoleDto
+            CreateMap<ApplicationRole, ApplicationRoleDTO>().ReverseMap();
         }
     }
 }
